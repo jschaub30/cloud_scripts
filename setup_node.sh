@@ -42,14 +42,24 @@ then
   mkfs.ext4 /dev/md0 > mkfs.log
   UUID=$(grep "Filesystem UUID" mkfs.log | perl -pe "s/.*Filesystem UUID: //")
   mkdir /nvme
-  cp /etc/fstab fstab.old
-  grep -v nvme fstab.old > fstab
-  echo "UUID=$UUID /nvme           ext4    nofail          1       1" >> fstab
-  cp fstab /etc/fstab
+  cp /etc/fstab /etc/fstab.old
+  grep -v nvme /etc/fstab.old > /etc/fstab
+  echo "UUID=$UUID /nvme           ext4    nofail          1       1" >> /etc/fstab
   mount -a
   chmod 777 /nvme
   chown -R ubuntu:ubuntu /nvme
 else
   echo "/nvme already exists"
 fi
+
+echo Setting up hosts 
+cp /etc/hosts /etc/hosts.old
+grep -v pcloud /etc/hosts.old > /etc/hosts
+
+IDX=1
+for IP in $(seq 194 2 206)
+do
+  echo "9.3.158.${IP}  pcloud$IDX pcloud${IDX}.austin.ibm.com" >> /etc/hosts
+  IDX=$((IDX+1))
+done
 
