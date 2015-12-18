@@ -17,6 +17,7 @@ then
 else
   echo user "stack" already created
 fi
+echo stack:stack | chpasswd
 
 apt-get install -y lvm2
 FLAG=$(pvdisplay | grep stack-volumes | wc -l)
