@@ -9,7 +9,12 @@ echo All keys created, now updating each server with all keys
 
 update_key (){
   scp authorized_keys $SERVER:~/.ssh/authorized_keys
-  CMD="ssh-keyscan -H localhost ${ALL_HOSTS[@]} > .ssh/known_hosts"
+  for HOST in ${ALL_HOSTS[@]}
+  do
+    CMD="ssh-keygen -R $HOST"
+    ssh $SERVER $CMD
+  done
+  CMD="ssh-keyscan -H localhost ${ALL_HOSTS[@]} >> .ssh/known_hosts"
   ssh $SERVER $CMD
 }
 

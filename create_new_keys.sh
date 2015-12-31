@@ -1,4 +1,5 @@
 #!/bin/bash
+# Return public ssh key of server.  If key does not exist, create it first.
 
 [ "$#" -lt 1 ] && echo "USAGE: $0 SERVER1 [SERVER2] ..."  && exit 1
 
